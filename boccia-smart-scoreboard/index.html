@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Boccia Smart Scoreboard | Tablero y Marcador Inteligente</title>
+  <meta name="description" content="Marcador digital, cronómetro y tablero inteligente para el deporte adaptado Boccia. Cumple con la normativa de juego y facilita el arbitraje de partidos.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://especialmenteeldon.com/boccia-smart-scoreboard/">
+
+  <!-- Open Graph / Meta Compartir -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Boccia Smart Scoreboard - Marcador y Cronómetro">
+  <meta property="og:description" content="Tablero inteligente oficial y cronómetro para partidos de Boccia. Disponible en Google Play Store.">
+  <meta property="og:url" content="https://especialmenteeldon.com/boccia-smart-scoreboard/">
+
+  <style>
+    :root {
+      --primary-color: #0d1b2a;
+      --secondary-color: #1b263b;
+      --accent-red: #e63946;
+      --accent-blue: #1d3557;
+      --accent-cyan: #0077b6;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --bg-light: #f8fafc;
+      --bg-white: #ffffff;
+      --border-color: #e2e8f0;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --container-max: 1120px;
+      --radius: 12px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: var(--font-family);
+      color: var(--text-dark);
+      background-color: var(--bg-light);
+      line-height: 1.6;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header & Navigation */
+    header {
+      background-color: var(--bg-white);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--primary-color);
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent-red) 50%, var(--accent-cyan) 50%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .brand-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: #ffffff;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-cyan);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: #ffffff !important;
+    }
+
+    .btn-primary:hover {
+      background-color: #000000;
+      transform: translateY(-1px);
+    }
+
+    .btn-playstore {
+      background-color: #01875f;
+      color: #ffffff !important;
+      box-shadow: 0 2px 4px rgba(1, 135, 95, 0.25);
+    }
+
+    .btn-playstore:hover {
+      background-color: #016b4b;
+      transform: translateY(-1px);
+    }
+
+    .btn-playstore svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 4.5rem 0 3.5rem;
+      background: linear-gradient(180deg, #ffffff 0%, var(--bg-light) 100%);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .badge-boccia {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background-color: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.825rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--primary-color);
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 580px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .app-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Scoreboard Mockup Visual */
+    .mockup-card {
+      background-color: var(--secondary-color);
+      border-radius: 20px;
+      padding: 1.75rem;
+      color: #ffffff;
+      box-shadow: var(--shadow-lg);
+      border: 2px solid #334155;
+      position: relative;
+    }
+
+    .mockup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .scoreboard-display {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .score-side {
+      padding: 1rem;
+      border-radius: var(--radius);
+    }
+
+    .score-side.red {
+      background-color: rgba(230, 57, 70, 0.15);
+      border: 1px solid var(--accent-red);
+    }
+
+    .score-side.blue {
+      background-color: rgba(29, 53, 87, 0.5);
+      border: 1px solid var(--accent-cyan);
+    }
+
+    .side-label {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .score-number {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0.5rem 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timer-display {
+      background-color: #0f172a;
+      border-radius: 10px;
+      padding: 0.75rem;
+      text-align: center;
+      font-family: monospace;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #38bdf8;
+      letter-spacing: 0.1em;
+      border: 1px solid #1e293b;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 4.5rem 0;
+      background-color: var(--bg-white);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 3.5rem;
+    }
+
+    .section-subtitle {
+      color: var(--accent-cyan);
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      letter-spacing: -0.02em;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: var(--bg-light);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      background: #ffffff;
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background-color: #e0f2fe;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* Privacy Policy Section */
+    .privacy-section {
+      padding: 4.5rem 0;
+      background-color: var(--bg-light);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .policy-box {
+      background: var(--bg-white);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .policy-tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-muted);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+    }
+
+    .policy-content {
+      display: none;
+    }
+
+    .policy-content.active {
+      display: block;
+    }
+
+    .policy-content h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 1.75rem 0 0.75rem;
+    }
+
+    .policy-content h3:first-child {
+      margin-top: 0;
+    }
+
+    .policy-content p, .policy-content ul {
+      color: #334155;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .policy-content ul {
+      padding-left: 1.5rem;
+    }
+
+    .policy-content li {
+      margin-bottom: 0.5rem;
+    }
+
+    .compliance-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      background-color: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      padding: 4.5rem 0;
+      background-color: var(--bg-white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .contact-info h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .contact-info p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-method {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background-color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-cyan);
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .form-group input, .form-group textarea {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--primary-color);
+      color: #94a3b8;
+      padding: 2.5rem 0;
+      font-size: 0.875rem;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a:hover {
+      color: #ffffff;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 868px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+      .hero {
+        padding: 2.5rem 0;
+      }
+      .hero h1 {
+        font-size: 1.85rem;
+      }
+      .scoreboard-display {
+        grid-template-columns: 1fr;
+      }
+      .policy-box {
+        padding: 1.5rem;
+      }
+      .footer-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navegación -->
+  <header>
+    <div class="container">
+      <nav class="nav-wrapper" aria-label="Menú principal">
+        <a href="#top" class="brand">
+          <div class="brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          </div>
+          <span>Boccia Smart Scoreboard</span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#features">Funcionalidades</a></li>
+          <li><a href="#privacy">Política de Privacidad</a></li>
+          <li><a href="#support">Soporte</a></li>
+        </ul>
+
+        <div>
+          <a href="https://play.google.com/store/apps/details?id=com.especialmenteeldon.bocciasmartscoreboard" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             class="btn btn-playstore">
+            <svg viewBox="0 0 24 24"><path d="M3.609 1.814L13.792 12 3.61 22.186a2.023 2.023 0 0 1-.61-.926V2.74c0-.342.227-.674.609-.926zm11.24 11.243l2.25 2.25-11.455 6.55 9.205-8.8zm2.25-2.25l-2.25 2.25L5.644 4.244 17.099 10.8zm1.055 1.057l3.197 1.828c.84.48.84 1.26 0 1.74l-3.197 1.828-2.09-2.09 2.09-2.306z"/></svg>
+            <span>Google Play</span>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <div class="badge-boccia">Deporte Adaptado y Paralímpico</div>
+            <h1>Control preciso e inteligente para tus partidos de Boccia</h1>
+            <p>
+              Diseñado específicamente para árbitros, entrenadores y deportistas de Boccia. Gestiona fácilmente parciales (ends), tiempos oficiales por tiro, puntuaciones de bolas rojas y azules y faltas técnicas en una interfaz clara y de alto contraste.
+            </p>
+            <div class="hero-actions">
+              <a href="https://play.google.com/store/apps/details?id=com.especialmenteeldon.bocciasmartscoreboard" 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 class="btn btn-playstore" style="font-size: 1.05rem; padding: 0.8rem 1.6rem;">
+                <svg viewBox="0 0 24 24"><path d="M3.609 1.814L13.792 12 3.61 22.186a2.023 2.023 0 0 1-.61-.926V2.74c0-.342.227-.674.609-.926zm11.24 11.243l2.25 2.25-11.455 6.55 9.205-8.8zm2.25-2.25l-2.25 2.25L5.644 4.244 17.099 10.8zm1.055 1.057l3.197 1.828c.84.48.84 1.26 0 1.74l-3.197 1.828-2.09-2.09 2.09-2.306z"/></svg>
+                <span>Descargar en Google Play</span>
+              </a>
+              <a href="#privacy" class="btn btn-primary">Ver Política de Privacidad</a>
+            </div>
+            <div class="app-meta">
+              <div class="meta-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#01875f"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Sin publicidad invasiva</span>
+              </div>
+              <div class="meta-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#01875f"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                <span>100% Privacidad Garantizada</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scoreboard Preview -->
+          <div class="mockup-card" aria-hidden="true">
+            <div class="mockup-header">
+              <span>END / PARCIAL: <strong>3 / 4</strong></span>
+              <span>JACK: ROJO</span>
+            </div>
+            <div class="scoreboard-display">
+              <div class="score-side red">
+                <div class="side-label" style="color: #f87171;">ROJO</div>
+                <div class="score-number">4</div>
+                <small style="color: #cbd5e1;">Bolas restantes: 2</small>
+              </div>
+              <div class="score-side blue">
+                <div class="side-label" style="color: #38bdf8;">AZUL</div>
+                <div class="score-number">2</div>
+                <small style="color: #cbd5e1;">Bolas restantes: 1</small>
+              </div>
+            </div>
+            <div class="timer-display">
+              03:45
+            </div>
+            <div style="text-align: center; margin-top: 0.75rem; font-size: 0.8rem; color: #94a3b8;">
+              Tiempo Oficial de Juego &middot; Adaptable a categorías BC1, BC2, BC3, BC4
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Características -->
+    <section id="features" class="features">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-subtitle">Características Clave</div>
+          <h2 class="section-title">Diseñado con precisión para el deporte Boccia</h2>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            </div>
+            <h3>Cronómetro y Tiempo Oficial</h3>
+            <p>Control exacto del tiempo de juego reglamentario y tiempos por tiro, adaptable a las divisiones oficiales BC1, BC2, BC3, BC4 y parejas/equipos.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+            </div>
+            <h3>Puntaje Parcial y Total</h3>
+            <p>Registro fácil e intuitivo del número de bolas anotadas por parcial (ends), desglose por lados rojo y azul, y cálculo automático de la victoria final.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>
+            </div>
+            <h3>Accesibilidad y Alto Contraste</h3>
+            <p>Botones de gran formato y colores de alto contraste que garantizan una lectura perfecta en pista tanto bajo luz artificial como en exterior.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Política de Privacidad (Privacy Policy) Requerida para Google Play -->
+    <section id="privacy" class="privacy-section">
+      <div class="container">
+        <div class="policy-box">
+          <div class="compliance-pill">
+            Cumplimiento Oficial &bull; Google Play Developer Policy
+          </div>
+
+          <!-- Selector de idioma -->
+          <div class="policy-tabs" role="tablist">
+            <button class="tab-btn active" id="tab-es" onclick="switchLanguage('es')" role="tab" aria-selected="true" aria-controls="content-es">Español (ES)</button>
+            <button class="tab-btn" id="tab-en" onclick="switchLanguage('en')" role="tab" aria-selected="false" aria-controls="content-en">English (EN)</button>
+          </div>
+
+          <!-- Contenido en Español -->
+          <div id="content-es" class="policy-content active" role="tabpanel" aria-labelledby="tab-es">
+            <h2>Política de Privacidad - Boccia Smart Scoreboard</h2>
+            <p><strong>Última actualización:</strong> 10 de noviembre de 2026</p>
+            <p>
+              Esta Política de Privacidad describe el tratamiento de la información en la aplicación móvil <strong>Boccia Smart Scoreboard</strong> (en adelante, la "Aplicación"), desarrollada por <strong>especialmenteeldon.com</strong>.
+            </p>
+
+            <h3>1. Información y Datos que No Recolectamos</h3>
+            <p>
+              En <strong>Boccia Smart Scoreboard</strong> creemos firmemente en la privacidad del usuario y en el respeto por los deportistas. Por ello:
+            </p>
+            <ul>
+              <li><strong>No solicitamos ni recopilamos datos de identificación personal</strong> (como nombre, número de teléfono, dirección postal o identificación oficial).</li>
+              <li><strong>No requerimos la creación de cuentas de usuario</strong> ni autenticación mediante credenciales externas.</li>
+              <li><strong>No almacenamos ni transmitimos datos biométricos, médicos o de ubicación precisa</strong> del dispositivo.</li>
+            </ul>
+
+            <h3>2. Almacenamiento Local en el Dispositivo</h3>
+            <p>
+              Las configuraciones de los partidos, nombres opcionales de jugadores asignados temporalmente y el historial de puntuaciones se almacenan de forma local y exclusiva en la memoria de su dispositivo móvil. Esta información no se transmite ni se sincroniza con servidores de terceros. Si desinstala la aplicación o borra sus datos locales, dicha información se eliminará por completo.
+            </p>
+
+            <h3>3. Cumplimiento de Normas de Google Play y No Venta de Datos</h3>
+            <p>
+              Cumplimos estrictamente con la Política de Datos de Usuario del Programa para Desarrolladores de Google Play. <strong>No vendemos, no comercializamos ni transferimos información de los usuarios a terceros con fines publicitarios, de marketing ni de rastreo analítico.</strong>
+            </p>
+
+            <h3>4. Privacidad de Menores (COPPA y GDPR-K)</h3>
+            <p>
+              Nuestra aplicación está destinada a la comunidad deportiva de Boccia y es apta para todas las edades. Al no recolectar ningún tipo de dato personal, cumplimos plenamente con las leyes de protección de la privacidad infantil en línea (COPPA y regulaciones equivalentes).
+            </p>
+
+            <h3>5. Modificaciones a esta Política</h3>
+            <p>
+              Nos reservamos el derecho de actualizar esta política para reflejar futuros cambios técnicos o normativos. Cualquier modificación se publicará en esta misma URL accesible públicamente: <code>https://especialmenteeldon.com/boccia-smart-scoreboard</code>.
+            </p>
+
+            <h3>6. Contacto</h3>
+            <p>
+              Para cualquier consulta o solicitud referente a la privacidad de nuestra aplicación, puede comunicarse directamente con nuestro equipo a través del correo electrónico: <strong>contacto@especialmenteeldon.com</strong>.
+            </p>
+          </div>
+
+          <!-- Contenido en Inglés -->
+          <div id="content-en" class="policy-content" role="tabpanel" aria-labelledby="tab-en">
+            <h2>Privacy Policy - Boccia Smart Scoreboard</h2>
+            <p><strong>Last updated:</strong> November 10, 2026</p>
+            <p>
+              This Privacy Policy describes how the mobile application <strong>Boccia Smart Scoreboard</strong> ("the Application"), developed by <strong>especialmenteeldon.com</strong>, handles your information.
+            </p>
+
+            <h3>1. Information We Do Not Collect</h3>
+            <p>
+              We are committed to user privacy and simplicity. Therefore:
+            </p>
+            <ul>
+              <li><strong>We do not collect or request Personally Identifiable Information (PII)</strong> such as names, phone numbers, email addresses, or government IDs.</li>
+              <li><strong>No account registration</strong> or login credentials are required to use the Application.</li>
+              <li><strong>No precise location or biometric data</strong> is gathered or transmitted.</li>
+            </ul>
+
+            <h3>2. Local Storage on Device</h3>
+            <p>
+              Game preferences, optional player labels, match scores, and timer settings are stored solely locally on your device. This data remains on your hardware and is never uploaded or shared with external servers. Uninstalling the app removes all saved local match records.
+            </p>
+
+            <h3>3. Google Play Policy Compliance &amp; No Data Sale</h3>
+            <p>
+              In full compliance with Google Play Developer Program policies, <strong>we do not sell, rent, license, or disclose user data to third parties for marketing, advertising, or cross-app tracking purposes.</strong>
+            </p>
+
+            <h3>4. Children's Privacy</h3>
+            <p>
+              The Application is safe for all audiences, including student-athletes and minors. Because we do not collect any personal data, we strictly abide by the Children's Online Privacy Protection Act (COPPA) and international standards.
+            </p>
+
+            <h3>5. Changes to This Policy</h3>
+            <p>
+              Any updates to this Privacy Policy will be reflected directly on this webpage: <code>https://especialmenteeldon.com/boccia-smart-scoreboard</code>.
+            </p>
+
+            <h3>6. Contact Us</h3>
+            <p>
+              If you have any questions or concerns regarding this privacy policy, please contact us at: <strong>contacto@especialmenteeldon.com</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Soporte y Contacto -->
+    <section id="support" class="contact-section">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="section-subtitle">Soporte Técnico</div>
+            <h3>¿Tienes dudas o sugerencias?</h3>
+            <p>
+              Trabajamos constantemente para que Boccia Smart Scoreboard sea la mejor herramienta para el deporte adaptado. Escríbenos para reportar errores o solicitar nuevas funciones.
+            </p>
+            
+            <div class="contact-method">
+              <div class="contact-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              </div>
+              <div>
+                <small style="color: var(--text-muted); display: block;">Correo Electrónico Directo</small>
+                <a href="mailto:contacto@especialmenteeldon.com" style="color: var(--accent-cyan); font-weight: 600;">contacto@especialmenteeldon.com</a>
+              </div>
+            </div>
+
+            <div class="contact-method">
+              <div class="contact-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+              </div>
+              <div>
+                <small style="color: var(--text-muted); display: block;">Desarrollador Oficial</small>
+                <span>especialmenteeldon.com</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <form class="contact-form" action="mailto:contacto@especialmenteeldon.com" method="post" enctype="text/plain">
+              <div class="form-group">
+                <label for="name">Nombre / Entidad deportiva</label>
+                <input type="text" id="name" name="name" placeholder="Tu nombre o club" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Tu Correo Electrónico</label>
+                <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
+              </div>
+              <div class="form-group">
+                <label for="message">Mensaje o Sugerencia</label>
+                <textarea id="message" name="message" rows="4" placeholder="¿En qué podemos ayudarte?" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">Enviar Consulta</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pie de página -->
+  <footer>
+    <div class="container footer-content">
+      <div>
+        <strong style="color: #ffffff;">Boccia Smart Scoreboard</strong> &copy; 2026 especialmenteeldon.com. Todos los derechos reservados.
+      </div>
+      <div class="footer-links">
+        <a href="#features">Funcionalidades</a>
+        <a href="#privacy">Política de Privacidad</a>
+        <a href="#support">Soporte</a>
+        <a href="https://play.google.com/store/apps/details?id=com.especialmenteeldon.bocciasmartscoreboard" target="_blank" rel="noopener noreferrer">Google Play</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function switchLanguage(lang) {
+      const tabEs = document.getElementById('tab-es');
+      const tabEn = document.getElementById('tab-en');
+      const contentEs = document.getElementById('content-es');
+      const contentEn = document.getElementById('content-en');
+
+      if (lang === 'en') {
+        tabEn.classList.add('active');
+        tabEn.setAttribute('aria-selected', 'true');
+        tabEs.classList.remove('active');
+        tabEs.setAttribute('aria-selected', 'false');
+
+        contentEn.classList.add('active');
+        contentEs.classList.remove('active');
+      } else {
+        tabEs.classList.add('active');
+        tabEs.setAttribute('aria-selected', 'true');
+        tabEn.classList.remove('active');
+        tabEn.setAttribute('aria-selected', 'false');
+
+        contentEs.classList.add('active');
+        contentEn.classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>
